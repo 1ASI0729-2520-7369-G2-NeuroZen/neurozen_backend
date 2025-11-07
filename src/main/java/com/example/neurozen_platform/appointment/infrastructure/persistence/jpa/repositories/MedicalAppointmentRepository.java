@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.example.neurozen_platform.appointment.domain.model.aggregates.MedicalAppointment;
 
 @Repository
-public interface AppointmentRepository extends JpaRepository<MedicalAppointment, Long> {
+public interface MedicalAppointmentRepository extends JpaRepository<MedicalAppointment, Long> {
     //This method is used to find all appointments by professionalId
     List<MedicalAppointment> findByProfessionalId(Long professionalId);
 
