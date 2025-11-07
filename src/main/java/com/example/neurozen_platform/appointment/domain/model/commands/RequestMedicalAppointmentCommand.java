@@ -1,7 +1,7 @@
 package com.example.neurozen_platform.appointment.domain.model.commands;
 
-public record RequestAppointmentCommand(Long patientId, Long professionalId, String appointmentDate) {
-    public RequestAppointmentCommand {
+public record RequestMedicalAppointmentCommand(Long patientId, Long professionalId, String appointmentDate) {
+    public RequestMedicalAppointmentCommand {
         if(patientId == null || patientId<=0) {
             throw new IllegalArgumentException("patientId cannot be null or blank");
         }

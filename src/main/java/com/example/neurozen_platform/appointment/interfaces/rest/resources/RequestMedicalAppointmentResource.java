@@ -3,10 +3,10 @@ package com.example.neurozen_platform.appointment.interfaces.rest.resources;
 public record RequestMedicalAppointmentResource(Long patientId, Long professionalId, String appointmentDateTime) {
 
     public RequestMedicalAppointmentResource {
-        if(patientId == null){
+        if(patientId == null || patientId<=0){
             throw new IllegalArgumentException("patientId cannot be null");
         }
-        if(professionalId == null){
+        if(professionalId == null || professionalId<=0){
             throw new IllegalArgumentException("professionalId cannot be null");
         }
         if(appointmentDateTime == null || appointmentDateTime.isBlank()){

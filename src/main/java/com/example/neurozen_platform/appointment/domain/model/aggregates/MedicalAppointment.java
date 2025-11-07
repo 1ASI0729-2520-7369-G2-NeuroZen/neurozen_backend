@@ -3,10 +3,12 @@ package com.example.neurozen_platform.appointment.domain.model.aggregates;
 import com.example.neurozen_platform.appointment.domain.model.valueobjects.AppointmentStatus;
 import com.example.neurozen_platform.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 
+@Entity
 public class MedicalAppointment extends AuditableAbstractAggregateRoot<MedicalAppointment> {
     private String appointmentDateTime;
 
@@ -26,11 +28,11 @@ public class MedicalAppointment extends AuditableAbstractAggregateRoot<MedicalAp
 
     }
 
-    public MedicalAppointment(Patient patient, Professional professional, AppointmentStatus status) {
+    public MedicalAppointment(Patient patient, Professional professional, String appointmentDateTime) {
         this.patient = patient;
         this.professional = professional;
         this.status = AppointmentStatus.REQUESTED;
-        this.appointmentDateTime = "";
+        this.appointmentDateTime = appointmentDateTime;
     }
 
     public void confirmAppointment() {
