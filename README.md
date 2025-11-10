@@ -1,7 +1,7 @@
-# ACME Learning Center Platform
+# Neurozen Platform
 
 ## Summary
-ACME Learning Center Platform, illustrating development with Java, Spring Boot Framework, and Spring Data JPA on MySQL Database. It also illustrates open-api documentation configuration and integration with Swagger UI.
+Neurozen Platform - Psychological Appointments Management System, illustrating development with Java, Spring Boot Framework, and Spring Data JPA on MySQL Database. It also illustrates open-api documentation configuration and integration with Swagger UI.
 
 ## Features
 - RESTful API
@@ -12,67 +12,48 @@ ACME Learning Center Platform, illustrating development with Java, Spring Boot F
 - Validation
 - MySQL Database
 - Domain-Driven Design
+- Clean Architecture
 
 ## Bounded Contexts
-This version of ACME Learning Center Platform is divided into three bounded contexts: Profiles, Learning, and IAM.
+This version of Neurozen Platform is divided into three bounded contexts: Appointments, Assessments, and Reports.
 
-### Profiles Context
+### Appointments Context
 
-The Profiles Context is responsible for managing the profiles of the users. It includes the following features:
+The Appointments Context is responsible for managing psychological appointments between employees and psychologists. It includes the following features:
 
-- Create a new profile.
-- Get a profile by id.
-- Get all profiles.
+- Create a new appointment.
+- Get an appointment by id.
+- Get all appointments.
+- Get appointments by employee id.
+- Get appointments by psychologist id.
+- Confirm an appointment.
+- Start an appointment.
+- Complete an appointment.
+- Cancel an appointment.
+- Reschedule an appointment.
 
-This context includes also an anti-corruption layer to communicate with the Learning Context. The anti-corruption layer is responsible for managing the communication between the Profiles Context and the Learning Context. It offers the following capabilities to other bounded contexts:
-- Create a new Profile, returning ID of the created Profile on success.
-- Get a Profile by Email, returning the associated Profile ID on success.
+### Assessments Context
 
-### Learning Context
+The Assessments Context is responsible for managing emotional and psychological assessments for employees. Its features include:
 
-The Learning Context is responsible for managing the courses, course learning paths and course enrollments. Its features include:
+- Create an Assessment.
+- Get an Assessment by id.
+- Update an Assessment information.
+- Get all Assessments.
+- Get all Assessments by employee id.
 
-- Create a Course.
-- Get a Course by id.
-- Update a Course information.
-- Delete a Course.
-- Get all Courses.
-- Add an existing Tutorial to Course Learning Path.
-- Register a new Student with implicit profile creation.
-- Submit a Student Enrollment Request in a Course.
-- Cancel a Student Enrollment Request in a Course.
-- Confirm a Student Enrollment Request in a Course.
-- Reject a Student Enrollment Request in a Course.
-- Get all Enrollments for a Course.
+Assessment types include: Emotional State, Stress Level, Anxiety, Depression, and General Wellbeing.
 
-This context includes also an anti-corruption layer to communicate with the Profiles Context. The anti-corruption layer is responsible for managing the communication between the Learning Context and the Profiles Context. It consumes the capabilities offered by the Profiles Context to:
+### Reports Context
 
-- Create the Profile of a new Student.
-- Get the Profile ID of a Student by Email.
+The Reports Context is responsible for generating reports about employee progress, emotional state, appointments, and assessments. Its features include:
 
-Tutorial is a concept that represents a learning resource. It is used to build the learning path of a course. The Tutorial aggregate and its publishing lifecycle are part of the Publishing bounded context, which is beyond the scope of this platform version.
+- Generate a new report.
+- Get a report by id.
+- Get all reports.
+- Get all reports by employee id.
 
-### Identity and Access Management (IAM) Context
-
-The IAM Context is responsible for managing platform users, including the sign in and sign up processes. It applies JSON Web Token based authorization and Password hashing. It also adds a request authorization middleware to Spring Boot Pipeline, in order to validate included token in request header on endpoints that require authorization. Its capabilities include:
-- Create a new User (Sign Up).
-- Authenticate a User (Sign In).
-- Get a User by ID.
-- Get All Users.
-- Get All Roles.
-- Use Spring Security features to implement an authorization pipeline based on request filtering.
-- Generate and validate JSON Web Tokens.
-- Apply Password hashing.
-
-This version implements the following roles: Admin, Instructor, and Student. The roles are used to manage the access to the platform features. The Admin role has access to all features, the Instructor and Student roles should have access according to business rules.
-
-This context includes also an anti-corruption layer. The anti-corruption layer is responsible for managing the communication between the IAM Context and other bounded Contexts. Its capabilities include:
-
-- Create a new User, returning ID of the created User on success. If roles are provided, it will also assign them to the user, otherwise the default role is assigned.
-- Get a User by ID, returning the associated User ID on success.
-- Get a User by Username, returning the associated User ID on success.
-
-- In this version, Open API documentation includes support for JSON Web Token based authorization.
+Report types include: Employee Progress, Emotional State Summary, Appointment Summary, and Assessment Summary.
 
 ### Reference Documentation
 
