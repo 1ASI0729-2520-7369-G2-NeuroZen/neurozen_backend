@@ -3,34 +3,47 @@ package com.example.neurozen_platform.appointment.domain.model.aggregates;
 import com.example.neurozen_platform.appointment.domain.model.valueobjects.AppointmentStatus;
 import com.example.neurozen_platform.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 
+@Entity
+@Getter
 public class MedicalAppointment extends AuditableAbstractAggregateRoot<MedicalAppointment> {
+
+    @Column(nullable = false)
     private String appointmentDateTime;
 
-    @Getter
-    @OneToOne
-    @JoinColumn(name = "patient_id")
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @Getter
-    @OneToOne
-    @JoinColumn(name = "professional_id")
+    @ManyToOne
+    @JoinColumn(name = "professional_id", nullable = false)
     private Professional professional;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private AppointmentStatus status;
+
+    private String type; // e.g., "consultation", "therapy"
+
+    private String mode; // e.g., "online", "in-person"
+
+    private String reason;
 
     public MedicalAppointment(){
 
     }
 
-    public MedicalAppointment(Patient patient, Professional professional, AppointmentStatus status) {
+    public MedicalAppointment(Patient patient, Professional professional, String appointmentDateTime,
+                              String type, String mode, String reason) {
         this.patient = patient;
         this.professional = professional;
+        this.appointmentDateTime = appointmentDateTime;
+        this.type = type;
+        this.mode = mode;
+        this.reason = reason;
         this.status = AppointmentStatus.REQUESTED;
-        this.appointmentDateTime = "";
     }
 
     public void confirmAppointment() {
