@@ -2,6 +2,7 @@ package com.neurozen.platform.assessments.application.internal.commandservices;
 
 import com.neurozen.platform.assessments.domain.model.aggregates.Assessment;
 import com.neurozen.platform.assessments.domain.model.commands.CreateAssessmentCommand;
+import com.neurozen.platform.assessments.domain.model.commands.DeleteAssessmentCommand;
 import com.neurozen.platform.assessments.domain.model.commands.UpdateAssessmentCommand;
 import com.neurozen.platform.assessments.domain.services.AssessmentCommandService;
 import com.neurozen.platform.assessments.infrastructure.persistence.jpa.repositories.AssessmentRepository;
@@ -11,7 +12,10 @@ import java.util.Optional;
 
 /**
  * Implementation of the AssessmentCommandService interface.
- * <p>This class is responsible for handling the commands related to the Assessment aggregate.</p>
+ * <p>
+ * This class is responsible for handling the commands related to the Assessment
+ * aggregate.
+ * </p>
  */
 @Service
 public class AssessmentCommandServiceImpl implements AssessmentCommandService {
@@ -27,8 +31,7 @@ public class AssessmentCommandServiceImpl implements AssessmentCommandService {
                 command.employeeId(),
                 command.assessmentType(),
                 command.score(),
-                command.emotionalState()
-        );
+                command.emotionalState());
         assessment.updateObservations(command.observations());
         assessment.updateRecommendations(command.recommendations());
         try {
@@ -50,8 +53,7 @@ public class AssessmentCommandServiceImpl implements AssessmentCommandService {
                 command.score(),
                 command.emotionalState(),
                 command.observations(),
-                command.recommendations()
-        );
+                command.recommendations());
         try {
             var updatedAssessment = assessmentRepository.save(assessment);
             return Optional.of(updatedAssessment);
@@ -59,5 +61,17 @@ public class AssessmentCommandServiceImpl implements AssessmentCommandService {
             throw new IllegalArgumentException("Error while updating assessment: %s".formatted(e.getMessage()));
         }
     }
-}
 
+    @Override
+    public void handle(DeleteAssessmentCommand command) {
+        var result = assessmentRepository.findById(command.assessmentId());
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException("Assessment with id %s not found".formatted(command.assessmentId()));
+        }
+        try {
+            assessmentRepository.deleteById(command.assessmentId());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error while deleting assessment: %s".formatted(e.getMessage()));
+        }
+    }
+}
