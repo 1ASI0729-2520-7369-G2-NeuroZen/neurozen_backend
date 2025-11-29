@@ -3,6 +3,7 @@ package com.neurozen.platform.iam.interfaces.rest;
 import com.neurozen.platform.iam.application.internal.commandservices.UserCommandServiceImpl;
 import com.neurozen.platform.iam.application.internal.queryservices.UserQueryServiceImpl;
 import com.neurozen.platform.iam.domain.model.aggregates.User;
+import com.neurozen.platform.iam.domain.model.valueobjects.UserRole;
 import com.neurozen.platform.iam.interfaces.rest.resources.AuthenticationResource;
 import com.neurozen.platform.iam.interfaces.rest.resources.LoginResource;
 import com.neurozen.platform.iam.interfaces.rest.resources.RegisterResource;
@@ -44,7 +45,14 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterResource resource) {
         try {
-            User user = userCommandService.register(resource.email(), resource.name(), resource.password());
+            User user;
+            // If role is provided, use it; otherwise default to EMPLOYEE
+            if (resource.role() != null && !resource.role().isBlank()) {
+                UserRole role = UserRole.valueOf(resource.role().toUpperCase());
+                user = userCommandService.register(resource.email(), resource.name(), resource.password(), role);
+            } else {
+                user = userCommandService.register(resource.email(), resource.name(), resource.password());
+            }
 
             // Generate a simple token (in production, use JWT)
             String token = UUID.randomUUID().toString();
@@ -53,7 +61,8 @@ public class AuthenticationController {
                     user.getId(),
                     user.getEmail(),
                     user.getName(),
-                    token);
+                    token,
+                    user.getRole() != null ? user.getRole().name() : "EMPLOYEE");
 
             return ResponseEntity.status(HttpStatus.CREATED).body(authResource);
         } catch (IllegalArgumentException e) {
@@ -87,7 +96,8 @@ public class AuthenticationController {
                     user.getId(),
                     user.getEmail(),
                     user.getName(),
-                    token);
+                    token,
+                    user.getRole() != null ? user.getRole().name() : "EMPLOYEE");
 
             return ResponseEntity.ok(authResource);
         }
@@ -113,7 +123,8 @@ public class AuthenticationController {
                     user.getName(),
                     user.getPhone(),
                     user.getDistrict(),
-                    user.getBio());
+                    user.getBio(),
+                    user.getRole().name());
             return ResponseEntity.ok(userResource);
         }
 
