@@ -13,8 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Authentication controller.
@@ -107,7 +109,7 @@ public class AuthenticationController {
 
     /**
      * Get current user (mock endpoint - in production would validate token)
-     * 
+     *
      * @param userId The user ID
      * @return The user resource
      */
@@ -129,5 +131,29 @@ public class AuthenticationController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Get all psychologists
+     *
+     * @return List of psychologist user resources
+     */
+    @GetMapping("/psychologists")
+    public ResponseEntity<List<UserResource>> getAllPsychologists() {
+        List<User> allUsers = userQueryService.getAllUsers();
+
+        List<UserResource> psychologists = allUsers.stream()
+                .filter(user -> user.getRole() == UserRole.PSYCHOLOGIST)
+                .map(user -> new UserResource(
+                        user.getId(),
+                        user.getEmail(),
+                        user.getName(),
+                        user.getPhone(),
+                        user.getDistrict(),
+                        user.getBio(),
+                        user.getRole().name()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(psychologists);
     }
 }
