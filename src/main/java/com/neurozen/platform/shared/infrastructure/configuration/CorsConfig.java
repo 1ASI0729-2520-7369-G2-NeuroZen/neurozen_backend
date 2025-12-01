@@ -10,7 +10,8 @@ import java.util.Arrays;
 
 /**
  * CORS configuration for the application.
- * Allows requests from the Angular frontend running on localhost:4200
+ * Allows requests from the Angular frontend (localhost for development,
+ * Firebase for production)
  */
 @Configuration
 public class CorsConfig {
@@ -18,26 +19,29 @@ public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        
-        // Allow requests from Angular frontend
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        
+
+        // Allow requests from Angular frontend (development and production)
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200", // Local development
+                "https://neurogenz.web.app", // Firebase production
+                "https://neurogenz.firebaseapp.com" // Firebase production (alternative)
+        ));
+
         // Allow all HTTP methods
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        
+
         // Allow all headers
         config.setAllowedHeaders(Arrays.asList("*"));
-        
+
         // Allow credentials (cookies, authorization headers, etc.)
         config.setAllowCredentials(true);
-        
+
         // How long the response from a pre-flight request can be cached
         config.setMaxAge(3600L);
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-        
+
         return new CorsFilter(source);
     }
 }
-
