@@ -24,4 +24,12 @@ public interface MedicalAppointmentRepository extends JpaRepository<MedicalAppoi
      * @return Optional containing the appointment if found, otherwise empty
      */
     Optional<Appointment> findById(Long id);
+
+    /**
+     * Check if an appointment exists by employee ID and psychologist ID
+     * @param employeeId The employee ID
+     * @param psychologistId The psychologist ID
+     * @return true if an appointment exists, false otherwise
+     */
+    boolean existsByEmployeeIdAndPsychologistId(EmployeeId employeeId, PsychologistId psychologistId);
 }
