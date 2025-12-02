@@ -18,4 +18,10 @@ public interface MedicalAppointmentRepository extends JpaRepository<MedicalAppoi
 
     Optional<MedicalAppointment> findByPatientIdAndProfessionalId(Long patientId, Long professionalId);
 
+    /**
+     * Find an appointment by its ID
+     * @param id The appointment ID
+     * @return Optional containing the appointment if found, otherwise empty
+     */
+    Optional<Appointment> findById(Long id);
 }
