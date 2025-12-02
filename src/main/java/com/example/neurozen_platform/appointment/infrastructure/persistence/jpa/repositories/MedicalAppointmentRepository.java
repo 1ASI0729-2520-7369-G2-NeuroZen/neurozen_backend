@@ -32,4 +32,10 @@ public interface MedicalAppointmentRepository extends JpaRepository<MedicalAppoi
      * @return true if an appointment exists, false otherwise
      */
     boolean existsByEmployeeIdAndPsychologistId(EmployeeId employeeId, PsychologistId psychologistId);
+
+    /**
+     * Delete all appointments by employee ID
+     * @param employeeId The employee ID
+     */
+    void deleteByEmployeeId(EmployeeId employeeId);
 }
