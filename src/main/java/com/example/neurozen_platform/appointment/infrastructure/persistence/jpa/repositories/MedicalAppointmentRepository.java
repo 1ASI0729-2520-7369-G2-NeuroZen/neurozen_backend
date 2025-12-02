@@ -58,4 +58,11 @@ public interface MedicalAppointmentRepository extends JpaRepository<MedicalAppoi
      * @return The count of appointments for the employee
      */
     long countByEmployeeId(EmployeeId employeeId);
+
+    /**
+     * Find the first appointment by employee ID ordered by ID descending
+     * @param employeeId The employee ID
+     * @return Optional containing the most recent appointment if found, otherwise empty
+     */
+    Optional<Appointment> findFirstByEmployeeIdOrderByIdDesc(EmployeeId employeeId);
 }
