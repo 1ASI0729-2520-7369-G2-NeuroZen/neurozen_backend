@@ -45,4 +45,10 @@ public interface MedicalAppointmentRepository extends JpaRepository<MedicalAppoi
      * @return The count of appointments for the psychologist
      */
     long countByPsychologistId(PsychologistId psychologistId);
+
+    /**
+     * Delete all appointments by psychologist ID
+     * @param psychologistId The psychologist ID
+     */
+    void deleteByPsychologistId(PsychologistId psychologistId);
 }
